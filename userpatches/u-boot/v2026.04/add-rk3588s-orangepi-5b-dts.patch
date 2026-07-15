@@ -1,0 +1,22 @@
+--- a/dts/upstream/src/arm64/rockchip/rk3588s-orangepi-5b.dts
++++ b/dts/upstream/src/arm64/rockchip/rk3588s-orangepi-5b.dts
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++
++/dts-v1/;
++
++#include "rk3588s-orangepi-5-5b.dtsi"
++
++/ {
++	model = "Xunlong Orange Pi 5B";
++	compatible = "xunlong,orangepi-5b", "rockchip,rk3588s";
++
++	aliases {
++		mmc0 = &sdhci;
++		mmc1 = &sdmmc;
++	};
++};
++
++&sdhci {
++	status = "okay";
++};

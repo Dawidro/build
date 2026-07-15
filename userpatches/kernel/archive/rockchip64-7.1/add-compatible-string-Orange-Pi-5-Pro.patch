@@ -1,0 +1,10 @@
+--- a/Documentation/devicetree/bindings/arm/rockchip.yaml
++++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+@@ -1324,6 +1324,7 @@ properties:
+           - enum:
+               - xunlong,orangepi-5-max
+               - xunlong,orangepi-5-plus
++              - xunlong,orangepi-5-pro
+               - xunlong,orangepi-5-ultra
+           - const: rockchip,rk3588
+
