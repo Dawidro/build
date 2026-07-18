@@ -260,10 +260,10 @@ index 11910f0e6a62..17db8f5298ee 100644
 +		   rk2_crypto_ahash.o
 diff --git a/drivers/crypto/rockchip/rk2_crypto.c b/drivers/crypto/rockchip/rk2_crypto.c
 new file mode 100644
-index 000000000000..6392b75a86a3
+index 000000000000..70634a12f3d2
 --- /dev/null
 +++ b/drivers/crypto/rockchip/rk2_crypto.c
-@@ -0,0 +1,746 @@
+@@ -0,0 +1,753 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Hardware cryptographic offloader for RK3568/RK3588 SoC
@@ -808,7 +808,7 @@ index 000000000000..6392b75a86a3
 +	int i, k, err = 0;
 +
 +	for (i = 0; i < rkc->num_algs; i++) {
-+		rkc->algs[i].dev = rkc;	/* Tie this alg copy to this device */
++		rkc->algs[i].dev = rkc;
 +		switch (rkc->algs[i].type) {
 +		case CRYPTO_ALG_TYPE_SKCIPHER:
 +			err = crypto_engine_register_skcipher(&rkc->algs[i].alg.skcipher);
@@ -865,17 +865,6 @@ index 000000000000..6392b75a86a3
 +
 +	rkc->dev = dev;
 +	platform_set_drvdata(pdev, rkc);
-+
-+	/*
-+	 * Duplicate the algorithms locally for this specific device.
-+	 * There is exactly one crypto block per SoC (crypto@fe370000 / crypto@fe380000)
-+	 * so -EEXIST cannot trigger on real hardware.
-+	 */
-+	rkc->num_algs = ARRAY_SIZE(rk2_crypto_algs_template);
-+	rkc->algs = devm_kmemdup(dev, rk2_crypto_algs_template,
-+				 sizeof(rk2_crypto_algs_template), GFP_KERNEL);
-+	if (!rkc->algs)
-+		return -ENOMEM;
 +
 +	rkc->variant = of_device_get_match_data(dev);
 +	if (!rkc->variant)
@@ -947,10 +936,24 @@ index 000000000000..6392b75a86a3
 +		goto err_pm_put;
 +	}
 +
++	/*
++	 * Duplicate the algorithm templates so each device has its own copy
++	 * with a back-pointer to its rk2_crypto_dev. Exactly one crypto block
++	 * exists per SoC, so registering these driver_names cannot collide
++	 * (-EEXIST) on real hardware.
++	 */
++	rkc->num_algs = ARRAY_SIZE(rk2_crypto_algs_template);
++	rkc->algs = kmemdup(rk2_crypto_algs_template,
++			    sizeof(rk2_crypto_algs_template), GFP_KERNEL);
++	if (!rkc->algs) {
++		err = -ENOMEM;
++		goto err_pm_put;
++	}
++
 +	err = rk2_crypto_register(rkc);
 +	if (err) {
 +		err = dev_err_probe(dev, err, "Fail to register crypto algorithms\n");
-+		goto err_pm_put;
++		goto err_free_algs;
 +	}
 +
 +	register_debugfs(rkc);
@@ -960,6 +963,8 @@ index 000000000000..6392b75a86a3
 +
 +	return 0;
 +
++ err_free_algs:
++	kfree(rkc->algs);
 + err_pm_put:
 +	pm_runtime_put_sync(dev);
 + err_pm:
@@ -991,6 +996,8 @@ index 000000000000..6392b75a86a3
 +
 +	dma_free_coherent(rkc->dev, sizeof(struct rk2_crypto_lli) * MAX_LLI,
 +			  rkc->tl, rkc->t_phy);
++	
++	kfree(rkc->algs);
 +}
 +
 +static struct platform_driver crypto_driver = {
@@ -1012,10 +1019,10 @@ index 000000000000..6392b75a86a3
 +
 diff --git a/drivers/crypto/rockchip/rk2_crypto.h b/drivers/crypto/rockchip/rk2_crypto.h
 new file mode 100644
-index 000000000000..8792d9f1c847
+index 000000000000..43c02523dd81
 --- /dev/null
 +++ b/drivers/crypto/rockchip/rk2_crypto.h
-@@ -0,0 +1,249 @@
+@@ -0,0 +1,248 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Hardware cryptographic offloader for RK3568/RK3588 SoC
@@ -1228,7 +1235,6 @@ index 000000000000..8792d9f1c847
 +struct rk2_crypto_template {
 +	u32 type;
 +	u32 rk2_mode;
-+	bool is_xts;
 +	struct rk2_crypto_dev *dev;
 +	union {
 +		struct skcipher_engine_alg skcipher;
