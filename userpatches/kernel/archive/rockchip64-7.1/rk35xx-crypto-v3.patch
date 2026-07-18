@@ -395,7 +395,7 @@ index 000000000000..6392b75a86a3
 +	.alg.skcipher.base = {
 +			.base.cra_name = "ecb(aes)",
 +			.base.cra_driver_name = "ecb-aes-rk2",
-+			.base.cra_priority = 400,
++			.base.cra_priority = 300,
 +			.base.cra_flags =
 +			CRYPTO_ALG_ASYNC | CRYPTO_ALG_NEED_FALLBACK,
 +			.base.cra_blocksize = AES_BLOCK_SIZE,
@@ -420,7 +420,7 @@ index 000000000000..6392b75a86a3
 +	 .alg.skcipher.base = {
 +			.base.cra_name = "cbc(aes)",
 +			.base.cra_driver_name = "cbc-aes-rk2",
-+			.base.cra_priority = 400,
++			.base.cra_priority = 300,
 +			.base.cra_flags =
 +			CRYPTO_ALG_ASYNC | CRYPTO_ALG_NEED_FALLBACK,
 +			.base.cra_blocksize = AES_BLOCK_SIZE,
@@ -447,7 +447,7 @@ index 000000000000..6392b75a86a3
 +	.alg.skcipher.base = {
 +			.base.cra_name = "xts(aes)",
 +			.base.cra_driver_name = "xts-aes-rk2",
-+			.base.cra_priority = 400,
++			.base.cra_priority = 300,
 +			.base.cra_flags =
 +			CRYPTO_ALG_ASYNC | CRYPTO_ALG_NEED_FALLBACK,
 +			.base.cra_blocksize = AES_BLOCK_SIZE,
@@ -487,7 +487,7 @@ index 000000000000..6392b75a86a3
 +				.base = {
 +					.cra_name = "md5",
 +					.cra_driver_name = "rk2-md5",
-+					.cra_priority = 400,
++					.cra_priority = 300,
 +					.cra_flags =
 +					CRYPTO_ALG_ASYNC |
 +					CRYPTO_ALG_NEED_FALLBACK,
@@ -522,7 +522,7 @@ index 000000000000..6392b75a86a3
 +				.base = {
 +					.cra_name = "sha1",
 +					.cra_driver_name = "rk2-sha1",
-+					.cra_priority = 400,
++					.cra_priority = 300,
 +					.cra_flags =
 +					CRYPTO_ALG_ASYNC |
 +					CRYPTO_ALG_NEED_FALLBACK,
@@ -556,7 +556,7 @@ index 000000000000..6392b75a86a3
 +				.base = {
 +					.cra_name = "sha224",
 +					.cra_driver_name = "rk2-sha224",
-+					.cra_priority = 400,
++					.cra_priority = 300,
 +					.cra_flags =
 +					CRYPTO_ALG_ASYNC |
 +					CRYPTO_ALG_NEED_FALLBACK,
@@ -590,7 +590,7 @@ index 000000000000..6392b75a86a3
 +				.base = {
 +					.cra_name = "sha256",
 +					.cra_driver_name = "rk2-sha256",
-+					.cra_priority = 400,
++					.cra_priority = 300,
 +					.cra_flags =
 +					CRYPTO_ALG_ASYNC |
 +					CRYPTO_ALG_NEED_FALLBACK,
@@ -624,7 +624,7 @@ index 000000000000..6392b75a86a3
 +				.base = {
 +					.cra_name = "sha384",
 +					.cra_driver_name = "rk2-sha384",
-+					.cra_priority = 400,
++					.cra_priority = 300,
 +					.cra_flags = CRYPTO_ALG_ASYNC |
 +					CRYPTO_ALG_NEED_FALLBACK,
 +					.cra_blocksize = SHA384_BLOCK_SIZE,
@@ -657,7 +657,7 @@ index 000000000000..6392b75a86a3
 +				.base = {
 +					.cra_name = "sha512",
 +					.cra_driver_name = "rk2-sha512",
-+					.cra_priority = 400,
++					.cra_priority = 300,
 +					.cra_flags =
 +					CRYPTO_ALG_ASYNC |
 +					CRYPTO_ALG_NEED_FALLBACK,
@@ -691,7 +691,7 @@ index 000000000000..6392b75a86a3
 +				.base = {
 +					.cra_name = "sm3",
 +					.cra_driver_name = "rk2-sm3",
-+					.cra_priority = 400,
++					.cra_priority = 300,
 +					.cra_flags =
 +					CRYPTO_ALG_ASYNC |
 +					CRYPTO_ALG_NEED_FALLBACK,
